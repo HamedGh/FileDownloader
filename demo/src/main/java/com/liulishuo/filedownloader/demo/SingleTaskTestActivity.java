@@ -15,6 +15,7 @@ import com.liulishuo.filedownloader.util.FileDownloadUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 /**
  * Created by Jacksgong on 12/21/15.
@@ -130,7 +131,6 @@ public class SingleTaskTestActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     @Override
@@ -145,10 +145,15 @@ public class SingleTaskTestActivity extends AppCompatActivity {
         final String url;
         final String path;
 
+        HashMap<String, String> header = new HashMap<String, String>();
+
         switch (position) {
             case 1:
-                url = Constant.BIG_FILE_URLS[2];
+//                url = Constant.BIG_FILE_URLS[2];
+                url = "http://api.irangrammy.com/api/v4/en/music/11238-5e570e44ae82f0f77133aad4f7789078";
                 tag = new ViewHolder(new WeakReference<>(this), progressBar1, null, 1);
+                header.put("token","12-c5c856982961f5ec59cad075015409f17c2a1b99");
+                header.put("uuid","1");
                 path = savePath1;
                 break;
             case 2:
@@ -170,6 +175,7 @@ public class SingleTaskTestActivity extends AppCompatActivity {
         }
 
         return FileDownloader.getImpl().create(url)
+                .setHeader(header)
                 .setPath(path)
                 .setCallbackProgressTimes(300)
                 .setTag(tag)

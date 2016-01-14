@@ -24,11 +24,13 @@ import com.liulishuo.filedownloader.event.IDownloadListener;
 import com.liulishuo.filedownloader.model.FileDownloadModel;
 import com.liulishuo.filedownloader.model.FileDownloadStatus;
 import com.liulishuo.filedownloader.model.FileDownloadTransferModel;
+import com.liulishuo.filedownloader.services.FileDownloadRunnable;
 import com.liulishuo.filedownloader.util.FileDownloadLog;
 import com.liulishuo.filedownloader.util.FileDownloadUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Jacksgong on 9/23/15.
@@ -39,6 +41,8 @@ public abstract class BaseDownloadTask {
 
     private final String url;
     private String path;
+    private String token;
+    private String uuid;
 
     private FileDownloadListener listener;
 
@@ -98,6 +102,17 @@ public abstract class BaseDownloadTask {
     public BaseDownloadTask setPath(final String path) {
         this.path = path;
         FileDownloadLog.d(this, "setPath %s", path);
+        return this;
+    }
+
+    /**
+     * @param header
+     */
+    public BaseDownloadTask setHeader(HashMap<String,String> header) {
+
+        FileDownloadRunnable.setHeader(header);
+
+//        FileDownloadLog.d(this, "setPath %s", path);
         return this;
     }
 

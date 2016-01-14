@@ -18,6 +18,7 @@ package com.liulishuo.filedownloader.services;
 
 import android.os.Process;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.liulishuo.filedownloader.event.DownloadTransferEvent;
 import com.liulishuo.filedownloader.model.FileDownloadModel;
@@ -36,11 +37,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.SocketTimeoutException;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by Jacksgong on 9/24/15.
  */
-class FileDownloadRunnable implements Runnable {
+public class FileDownloadRunnable implements Runnable {
 
     private static final int BUFFER_SIZE = 1024 * 4;
     private final FileDownloadTransferModel downloadTransfer;
@@ -277,7 +280,6 @@ class FileDownloadRunnable implements Runnable {
 
         } while (true);
 
-
     }
 
     private void addHeader(Request.Builder builder) {
@@ -285,6 +287,24 @@ class FileDownloadRunnable implements Runnable {
             builder.addHeader("If-Match", this.etag);
             builder.addHeader("Range", String.format("bytes=%d-", downloadTransfer.getSoFarBytes()));
         }
+//        builder.addHeader("token", FileDownloadRunnable.token);
+//        builder.addHeader("uuid", FileDownloadRunnable.uuid);
+        Log.d("addHeader","isContinueDownloadAvailable");
+
+        Iterator myVeryOwnIterator = header.keySet().iterator();
+        while(myVeryOwnIterator.hasNext()) {
+            String key=(String)myVeryOwnIterator.next();
+            String value=(String)header.get(key);
+            builder.addHeader(key, value);
+        }
+    }
+
+    static HashMap<String, String> header = new HashMap<String, String>();
+//    static String token = "";
+//    static String uuid = "";
+
+    public static void setHeader(HashMap<String,String> header){
+        FileDownloadRunnable.header = header;
     }
 
     private void updateHeader(Response response) {
